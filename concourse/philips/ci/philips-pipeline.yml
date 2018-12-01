@@ -1,0 +1,27 @@
+---
+
+resources:
+  - name: philips-home
+    type: git
+    source:
+      uri: https://github.com/satishnaidu/philipshome.git
+      branch: develop
+      username: ((service_user))
+      password: ((service_pw))
+  - name: docker-image-repo
+    type: docker-image
+    source:
+      email: ((docker-hub-email))
+      username: ((docker-hub-username))
+      password: ((docker-hub-password))
+      repository: ((docker-hub-username))/philipshome
+
+jobs:
+- name: publish-philips-image
+  public: true
+  plan:
+  - get: philips-home
+    trigger: true
+  - put: docker-image-repo
+    params:
+      build: philips-home/

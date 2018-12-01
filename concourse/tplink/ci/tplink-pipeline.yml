@@ -1,0 +1,27 @@
+---
+
+resources:
+  - name: tplink-home
+    type: git
+    source:
+      uri: https://github.com/satishnaidu/tplinkhome.git
+      branch: master
+      username: ((service_user))
+      password: ((service_pw))
+  - name: docker-image-repo
+    type: docker-image
+    source:
+      email: ((docker-hub-email))
+      username: ((docker-hub-username))
+      password: ((docker-hub-password))
+      repository: ((docker-hub-username))/tplinkhome
+
+jobs:
+- name: publish-tplink-image
+  public: true
+  plan:
+  - get: tplink-home
+    trigger: true
+  - put: docker-image-repo
+    params:
+      build: tplink-home/

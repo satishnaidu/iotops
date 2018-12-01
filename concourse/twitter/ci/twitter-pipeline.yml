@@ -1,0 +1,27 @@
+---
+
+resources:
+  - name: twitter-home
+    type: git
+    source:
+      uri: https://github.com/satishnaidu/twitterhome.git
+      branch: master
+      username: ((service_user))
+      password: ((service_pw))
+  - name: docker-image-repo
+    type: docker-image
+    source:
+      email: ((docker-hub-email))
+      username: ((docker-hub-username))
+      password: ((docker-hub-password))
+      repository: ((docker-hub-username))/twitterhome
+
+jobs:
+- name: twitter-tplink-image
+  public: true
+  plan:
+  - get: twitter-home
+    trigger: true
+  - put: docker-image-repo
+    params:
+      build: twitter-home/
